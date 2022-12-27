@@ -23,12 +23,15 @@ const createUser = async (req, res) => {
         email,
         password
     }).save();
-    return res.send(user)
+    // return res.status(200).send(user);
+    return res.status(200).send(user);
 }
 
 const getUserUsingPostReq = async (req, res) => {
     console.log(`API hit from :: ""${req.url}"" , method :: ""${req.method}""`);
-    return res.send(await AppUser.find({email: req.body.email}))
+    const checkUser = await AppUser.find({email: req.body.email});
+    console.log(checkUser);
+    return res.send(checkUser)
 }
 
 const getAllUsers = async (req, res) => {

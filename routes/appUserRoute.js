@@ -4,7 +4,7 @@ import { createUser, getUserUsingPostReq, getAllUsers, getUserUsingParam, delete
 const router = express.Router();
 
 router.post('/signup', createUser)
-router.post('/userdetails', getUserUsingPostReq)
+router.post('/login', getUserUsingPostReq)
 
 router.get('/allusers', getAllUsers)
 router.get('/user/:id', getUserUsingParam)
