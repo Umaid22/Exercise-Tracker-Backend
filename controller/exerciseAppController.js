@@ -1,12 +1,13 @@
 import AppUser from '../model/AppUserSchema.js';
-import { userLoginValidations } from '../validations/userLoginValidation.js';
+import { userSignupValidations } from '../validations/userLoginValidation.js';
 // import jwt from ''
 
 const createUser = async (req, res) => {
     console.log(`API hit from :: ""${req.url}"" , method :: ""${req.method}""`);
-    console.log(`Data1 fom client is :: ""${req.body}""`);
+    // console.log(`Data fom client is :: ""${req}""`);
+    console.log(req.body);
 
-    const validation = userLoginValidations(req.body);
+    const validation = userSignupValidations(req.body);
     const {error} = validation;
     if (error) {
         return res.status(400).send(error.details[0].message)
@@ -14,7 +15,9 @@ const createUser = async (req, res) => {
     
     const userExitCheck = await AppUser.findOne({email: req.body.email})
     if (userExitCheck) {
-        res.status(400).send(`User with email ${req.body.email} already exists`)
+        // console.log(error);
+        return res.status(400).json({message:"User already exists"});
+        // res.status(400).send(`User with email ${req.body.email} already exists`)
     } 
 
     const { name, email, password } = req.body;
@@ -23,20 +26,32 @@ const createUser = async (req, res) => {
         email,
         password
     }).save();
-    // return res.status(200).send(user);
     return res.status(200).send(user);
+    // res.status(200).send(req.body);
 }
 
 const getUserUsingPostReq = async (req, res) => {
     console.log(`API hit from :: ""${req.url}"" , method :: ""${req.method}""`);
-    const checkUser = await AppUser.find({email: req.body.email});
-    console.log(checkUser);
-    return res.send(checkUser)
+    const checkUser = await AppUser.findOne({email: req.body.email});
+    if(!checkUser){
+        return res.status(404).json({message:"User not found"});
+    }
+    if (checkUser) {
+        if(checkUser.password !== req.body.password){
+            return res.status(404).json({message:"Password incorrect"});
+        }
+        console.log(checkUser);
+        return res.send(checkUser)
+    }
 }
 
 const getAllUsers = async (req, res) => {
-    console.log(`API hit from :: ""${req.url}"", method :: ""${req.method}""`);
-    return res.send(await AppUser.find())
+    // console.log(`API hit from :: ""${}"", method :: ""${req.method}""`);
+    // console.log(`""header are "" ::${req.header("userEmail")}`);
+    let email = req.header("userEmail");
+    console.log(email);
+    // res.send("ok")
+    return res.send(await AppUser.findOne({email:email}))
 }
 
 const getUserUsingParam = async (req, res) => {

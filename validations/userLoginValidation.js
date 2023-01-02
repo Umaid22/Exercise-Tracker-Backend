@@ -1,6 +1,6 @@
 import joi from "joi";
 
-const userLoginValidations = (data) =>{
+const userSignupValidations = (data) =>{
 
     const schema = joi.object({
         name: joi.string().required(),
@@ -20,4 +20,4 @@ const userLoginValidations = (data) =>{
 //     return schema.validate(data);
 // }
 
-export {userLoginValidations}
+export {userSignupValidations}
