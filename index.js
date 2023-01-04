@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import appUserRoute from "./routes/appUserRoute.js";
+import corsOptions from './config/corsOptions.js';
 
 const app = express();
 const port = 5000;
@@ -11,6 +12,7 @@ const port = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors(corsOptions));
 
 dotenv.config();
 
